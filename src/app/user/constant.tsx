@@ -25,9 +25,4 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/user/predict/text",
     icon: <IconKeyboard width="24" height="24" />,
   },
-  {
-    title: "Profile",
-    path: "/user/profile",
-    icon: <IconUser width="24" height="24" />,
-  },
 ];

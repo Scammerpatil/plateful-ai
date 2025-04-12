@@ -12,7 +12,7 @@ interface Response {
   title: string;
   ingredients: string[];
   instructions: string;
-  youtubeLinks?: string;
+  youtubeLinks?: string[];
 }
 
 const PredictFromImage = () => {
@@ -139,14 +139,23 @@ const PredictFromImage = () => {
                     <IconBrandYoutube className="mr-2 text-error" /> YouTube
                     Recommendation:
                   </p>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${extractVideoId(
-                      response.youtubeLinks
-                    )}`}
-                    title="YouTube video"
-                    allowFullScreen
-                    className="w-full h-52 rounded-xl shadow"
-                  ></iframe>
+                  {response.youtubeLinks.map((link, idx) => (
+                    <a
+                      key={idx}
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-base-content text-base font-semibold hover:underline flex items-center"
+                    >
+                      <IconBrandYoutube className="mr-2 text-error" />
+                      {link}
+                    </a>
+                  ))}
+                  {response.youtubeLinks.length === 0 && (
+                    <p className="text-base-content text-base font-semibold">
+                      No YouTube recommendations available.
+                    </p>
+                  )}
                 </div>
               )}
             </div>

@@ -26,22 +26,23 @@ model = load_model(MODEL_PATH)
 
 YOUTUBE_API_KEY = "AIzaSyBMZ6JwGLr3mZzvhbIl4poeFHG_0ET8CcI"
 
-def fetch_youtube_video_link(query):
+def fetch_youtube_video_links(query, max_results=5):
     url = "https://www.googleapis.com/youtube/v3/search"
     params = {
         "part": "snippet",
         "q": query + " recipe",
         "type": "video",
-        "maxResults": 1,
+        "maxResults": max_results,
         "key": YOUTUBE_API_KEY
     }
     response = requests.get(url, params=params)
+    video_links = []
     if response.status_code == 200:
         items = response.json().get("items", [])
-        if items:
-            video_id = items[0]["id"]["videoId"]
-            return f"https://www.youtube.com/watch?v={video_id}"
-    return ""
+        for item in items:
+            video_id = item["id"]["videoId"]
+            video_links.append(f"https://www.youtube.com/watch?v={video_id}")
+    return video_links
 
 # --- PREDICT FUNCTION ---
 def predict_dish(image_path):
@@ -55,7 +56,7 @@ def predict_dish(image_path):
     return food_list[index]
 
 def generate_recipe(dish_name):
-    youtube_link = fetch_youtube_video_link(dish_name)
+    youtube_link = fetch_youtube_video_links(dish_name)
     prompt = f"""
     Generate a detailed recipe for the dish: "{dish_name}".
     Return the response in this JSON format:
@@ -63,7 +64,7 @@ def generate_recipe(dish_name):
       "title": "Dish Name",
       "ingredients": "[ingredient1, ingredient2, ...]",
       "instructions": "1. Step one\\n2. Step two\\n...",
-      "youtubeLink": "{youtube_link}",
+      "youtubeLinks": "{youtube_link}",
     }}
     Output only the JSON object, no explanation.
     """
