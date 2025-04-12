@@ -5,19 +5,21 @@ import os
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 import pickle
 import json
 import os
 import locale  
 import sys
+import requests
 sys.stdout.reconfigure(encoding='utf-8')
 os.environ["PYTHONIOENCODING"] = "utf-8"
 myLocale=locale.setlocale(category=locale.LC_ALL, locale="en_GB.UTF-8")
 
-import requests
+load_dotenv()
 
-YOUTUBE_API_KEY = "AIzaSyBMZ6JwGLr3mZzvhbIl4poeFHG_0ET8CcI"
+YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 def fetch_youtube_video_link(query):
     url = "https://www.googleapis.com/youtube/v3/search"
